@@ -37,28 +37,7 @@ async def root():
     return {"message": "hello world"}
 
 
-"""
-@app.post('/frames/')
-async def upload(files: List[UploadFile] = File()):
-    req = uuid.uuid4()
-    for file in files:
-        try:
-            content = await file.read()
-            fileName = str(uuid.uuid4())
-            completeName = os.path.join(save_path, fileName+'.png')
-            with open(completeName, 'wb') as f:
-                f.write(content)
-                db_frame = Frame(title=fileName, request=req)
-                db.session.add(db_frame),
-                db.session.commit()
 
-        except Exception:
-            return {"message": "There was an error uploading the file(s)"}
-        finally:
-            await file.close()
-
-    return {"message": f"Successfuly uploaded {[file.filename for file in files]}"}
-"""
 
 
 @app.post('/frames/')
@@ -102,8 +81,9 @@ async def delete_point(request_id: str):
         MINIO_CLIENT.remove_object('data', (frame.title + '.png'))
         db.session.delete(frame)
         db.session.commit()
+        print(res)
 
-    return {'deleted': {'file': title+'.png'} for title in res}
+    return {'deleted': ['file: ' + name + '.png' for name in res]}
 
 
 # To run locally
@@ -114,8 +94,4 @@ if __name__ == '__main__':
         MINIO_CLIENT.make_bucket('data')
     else:
         print('Bucket already exist')
-"""
-db_point = Frame(title=uuid.uuid4(), request=req)
-                db.session.add(db_point),
-                db.session.commit()
-                """
+
