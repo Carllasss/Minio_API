@@ -79,13 +79,13 @@ async def upload(files: List[UploadFile] = File()):
 
 
 
-@app.get('/frames/{request}')
-async def frame(request: str):
-    frames = db.session.query(Frame).filter(Frame.request == str(request))
-    if not frames:
-        raise HTTPException(status_code=404, detail="Frame not found")
+@app.get('/frames/{request_id}')
+async def frame(request_id: str):
+    frames = db.session.query(Frame).filter(Frame.request == str(request_id))
+    #if not frames:
+        #raise HTTPException(status_code=404, detail="Frame not found")
 
-    return frames
+    return [{'file': frame.title+'.png', 'time_created': frame.time_created} for frame in frames]
 
 """
 @app.delete("/point/{point_id}")
