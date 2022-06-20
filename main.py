@@ -4,9 +4,6 @@ from fastapi_sqlalchemy import DBSessionMiddleware, db
 from minio import Minio
 from http.client import HTTPException
 
-from minio.deleteobjects import DeleteObject
-
-from schema import Inbox as In
 from typing import List
 from models import Frame as Frame
 import uuid
