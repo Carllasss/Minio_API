@@ -1,20 +1,11 @@
-
 from fastapi import Response
-
 from minio import Minio
-import os
-from dotenv import load_dotenv
+import config
 
 
-load_dotenv('.env')
-ACCESS_KEY = os.environ.get('ACCESS_KEY')
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
-MINIO_API_HOST = 'http://localhost:9000'
-
-MINIO_CLIENT = Minio('localhost:9000',
-                     access_key=ACCESS_KEY,
-                     secret_key=SECRET_KEY,
+MINIO_CLIENT = Minio(config.MINIO_HOST,
+                     access_key=config.ACCESS_KEY,
+                     secret_key=config.SECRET_KEY,
                      secure=False)
 
 

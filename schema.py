@@ -3,6 +3,6 @@ from pydantic import BaseModel
 
 
 class Inbox(BaseModel):
-    request: str
+    request_id: str
     title: str
     created_at: str
