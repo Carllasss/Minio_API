@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from fastapi_sqlalchemy import DBSessionMiddleware, db
+from fastapi_sqlalchemy import DBSessionMiddleware
 import os
 from services.minio_service import MINIO_CLIENT
 from api import router

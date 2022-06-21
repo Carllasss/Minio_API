@@ -19,10 +19,10 @@ MINIO_CLIENT = Minio('localhost:9000',
 
 
 def minio_post(fileName, file):
-    MINIO_CLIENT.fput_object('data', fileName + '.png', file.file.fileno())
+    MINIO_CLIENT.fput_object('data', fileName, file.file.fileno())
     return Response('posted')
 
 
 def minio_delete(fileName):
-    MINIO_CLIENT.remove_object('data', (fileName.title + '.png'))
+    MINIO_CLIENT.remove_object('data', fileName.title)
     return ('deleted')
