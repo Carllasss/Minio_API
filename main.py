@@ -3,28 +3,17 @@ from fastapi import FastAPI, UploadFile, File, Response, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware, db
 from minio import Minio
 from http.client import HTTPException
-
 from typing import List
 from models import Frame as Frame
 import uuid
 import os
-from dotenv import load_dotenv
+from services.full_service import post
+from services.minio_service import MINIO_CLIENT
 
-load_dotenv('.env')
+
 
 app = FastAPI()
 
-ACCESS_KEY = os.environ.get('ACCESS_KEY')
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
-MINIO_API_HOST = 'http://localhost:9000'
-
-MINIO_CLIENT = Minio('localhost:9000',
-                     access_key=ACCESS_KEY,
-                     secret_key=SECRET_KEY,
-                     secure=False)
-
-save_path = './media/'
 # to avoid csrftokenError
 app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
 
@@ -34,53 +23,33 @@ async def root():
     return {"message": "hello world"}
 
 
-
-
-
 @app.post('/frames/')
 async def upload(files: List[UploadFile] = File()):
-    if len(files) < 15:
-        req = uuid.uuid4()
-        for file in files:
-            try:
-
-                fileName = str(uuid.uuid4())
-                MINIO_CLIENT.fput_object('data', fileName + '.png', file.file.fileno())
-                db_frame = Frame(title=fileName, request=req)
-                db.session.add(db_frame),
-                db.session.commit()
-
-            except Exception:
-                return Exception
-
-        return {"request_id": req, 'files': [file.filename for file in files]}
-    else:
+    if len(files) > 15:
         return {'error': f'Too many files. No more than 15 required.'}
+    result = post(files)
+    return result
 
-
+"""
 @app.get('/frames/{request_id}')
 async def frame(request_id: str):
-    frames = db.session.query(Frame).filter(Frame.request == str(request_id))
-    if not frames:
-        raise HTTPException(status_code=404, detail="Frame not found")
+    result = db_get_by_request_id(request_id)
 
-    return [{'file': frame.title + '.png', 'time_created': frame.time_created} for frame in frames]
+    return result
 
 
 @app.delete("/frames/{request_id}")
-async def delete_point(request_id: str):
+async def delete_frame(request_id: str):
     frames = db.session.query(Frame).filter(Frame.request == str(request_id))
     if not frames:
-        raise HTTPException(status_code=404, detail="Point not found")
-    res = []
+        raise HTTPException(status_code=404, detail="Frame not found")
     for frame in frames:
-        res.append(frame.title)
-        MINIO_CLIENT.remove_object('data', (frame.title + '.png'))
-        db.session.delete(frame)
-        db.session.commit()
-        print(res)
+        minio_delete(frame)
+        result = db_delete(frame)
+    return result
 
-    return {'deleted': ['file: ' + name + '.png' for name in res]}
+"""
+
 
 
 # To run locally
