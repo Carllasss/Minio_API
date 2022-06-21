@@ -1,6 +1,4 @@
-from models import Frame
-from fastapi_sqlalchemy import db
-from http.client import HTTPResponse
+from datetime import datetime
 from fastapi import HTTPException, Response
 from uuid import uuid4
 from services.minio_service import minio_delete, minio_post
@@ -28,7 +26,7 @@ def post(files):
 
 def get(request_id):
     frames = db_get_by_request_id(request_id)
-    return [{'file': frame.title + '.png', 'time_created': frame.time_created} for frame in frames]
+    return [{'file': frame.title + '.png', 'created_at': datetime.strftime(frame.created_at, "%d.%m.%Y, %H:%M:%S")} for frame in frames]
 
 
 def delete(request_id):

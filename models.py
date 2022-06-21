@@ -13,4 +13,4 @@ class Frame(Base):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     request = Column(String)
     title = Column(String)
-    time_created = Column(DateTime(timezone=True), server_default=datetime.datetime.now().isoformat(" ", "seconds"))
+    created_at = Column(DateTime(timezone=True), server_default=datetime.datetime.now().isoformat(" ", "seconds"))
