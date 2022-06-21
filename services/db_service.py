@@ -12,15 +12,15 @@ def db_post(fileName,request_id):
     return Response('db posted too')
 
 
-async def db_get_by_request_id(request_id):
+def db_get_by_request_id(request_id):
     frames = db.session.query(Frame).filter(Frame.request == str(request_id))
     if not frames:
         raise HTTPException(status_code=404, detail="Frame not found")
 
-    return [{'file': frame.title + '.png', 'time_created': frame.time_created} for frame in frames]
+    return frames
 
 
-async def db_delete(frame):
+def db_delete(frame):
 
     db.session.delete(frame)
     db.session.commit()

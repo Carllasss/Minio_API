@@ -25,4 +25,4 @@ def minio_post(fileName, file):
 
 def minio_delete(fileName):
     MINIO_CLIENT.remove_object('data', (fileName.title + '.png'))
-    return fileName + ' deleted'
+    return ('deleted')

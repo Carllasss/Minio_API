@@ -19,3 +19,19 @@ def post(files):
             return Exception
 
     return {"request_id": request_id, 'files': [file.filename for file in files]}
+
+
+def get(request_id):
+    frames = db_get_by_request_id(request_id)
+    return [{'file': frame.title + '.png', 'time_created': frame.time_created} for frame in frames]
+
+
+def delete(request_id):
+    frames = db_get_by_request_id(request_id)
+
+    for frame in frames:
+        result = minio_delete(frame)
+        result1 = db_delete(frame)
+    return Response('deleted')
+
+
