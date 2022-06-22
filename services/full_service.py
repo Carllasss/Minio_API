@@ -31,7 +31,7 @@ def post(files):
 
 def get(request_id):
     frames = db_get_by_request_id(request_id)
-    return [{'file': frame.title + '.png', 'created_at': datetime.strftime(frame.created_at, "%d.%m.%Y, %H:%M:%S")} for
+    return [{'file': frame.title, 'created_at': datetime.strftime(frame.created_at, "%d.%m.%Y, %H:%M:%S")} for
             frame in frames]
 
 
