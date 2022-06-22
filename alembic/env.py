@@ -1,6 +1,6 @@
 from logging.config import fileConfig
 
-from models import Frame
+from models import frame_table
 
 
 
@@ -37,7 +37,7 @@ import models
 
 
 
-target_metadata = models.Base.metadata
+target_metadata = frame_table.metadata
 
 
 # other values from the config, defined by the needs of env.py,
