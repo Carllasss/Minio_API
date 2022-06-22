@@ -1,6 +1,7 @@
 import os
 import sys
-
+import psycopg2
+from fastapi import Depends
 from fastapi_sqlalchemy import db
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
@@ -9,6 +10,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker, Session
 
 import main
 import json
+
+from models import Base
 from services.full_service import get
 import pytest
 
@@ -18,35 +21,23 @@ client = TestClient(main.app)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
-@pytest.fixture(scope="session")
-def engine():
-    return create_engine("postgresql://localhost/test_database")
-
-
-@pytest.fixture(scope="session")
-def tables(engine):
-    BaseModel.metadata.create_all(engine)
-    yield
-    BaseModel.metadata.drop_all(engine)
+DATABASE_URL = 'postgresql://postgres:12345@localhost/testdb'
+engine = create_engine(
+    DATABASE_URL
+)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
-@pytest.fixture
-def dbsession(engine, tables):
-    """Returns an sqlalchemy session, and after the test tears down everything properly."""
-    connection = engine.connect()
-    # begin the nested transaction
-    transaction = connection.begin()
-    # use the connection with the already started transaction
-    session = Session(bind=connection)
+def override_get_db():
+    try:
+        db = TestingSessionLocal()
+        yield db
+    finally:
+        db.close()
 
-    yield session
 
-    session.close()
-    # roll back the broader transaction
-    transaction.rollback()
-    # put back the connection to the connection pool
-    connection.close()
+
 
 
 def test_post():
