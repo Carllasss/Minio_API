@@ -1,9 +1,8 @@
 from fastapi import APIRouter, UploadFile, File
 from services.full_service import post, get, delete
 from typing import List
-from fastapi.responses import JSONResponse, Response
-from schema import Inbox
-from responses import Message
+from fastapi.responses import Response
+
 
 router = APIRouter(
     prefix="/frames",
@@ -30,6 +29,3 @@ async def get_frame(request_id: str):
 async def delete_frame(request_id: str):
     result = delete(request_id)
     return Response(status_code=204)
-
-
-

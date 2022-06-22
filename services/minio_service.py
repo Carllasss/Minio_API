@@ -21,4 +21,9 @@ class MinioClient:
 
     def minio_delete(self, fileName):
         self.client.remove_object('data', fileName.title)
-        return ('deleted')
+        return 'deleted'
+
+    def obj_exist(self, fileName):
+
+        response = self.client.get_object('data', fileName)
+        return response
