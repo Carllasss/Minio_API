@@ -7,7 +7,8 @@
 | POST /frames   | **form data** <br> files: binary           |
 
 ### Развертывание на docker
-Для развертывания используйте: `docker-compose -f docker-compose.yml up`
+Для развертывания используйте: 
+`docker-compose -f docker-compose.yml up`
 
 ### Тесты на docker
 Для тестирования используйте: `docker-compose -f docker-compose-test.yml up`
