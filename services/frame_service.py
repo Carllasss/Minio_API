@@ -1,4 +1,3 @@
-from datetime import datetime
 from fastapi import HTTPException
 from uuid import uuid4
 
@@ -12,17 +11,18 @@ db_client = DbClient()
 
 def post(files):
     request_id = uuid4()
+    new_files_names = []
     for file in files:
-
         try:
             file_name = (str(uuid4()) + '.jpg')
+            new_files_names.append(file_name)
             minio_client.minio_post(file_name, file)
             db_client.db_post(file_name, request_id)
 
         except Exception:
             return Exception
 
-    return {"request_id": request_id, 'files': [file.filename for file in files]}
+    return {"request_id": request_id, 'files': [new_files_names[i-1] for i in range(len(new_files_names))]}
 
 
 def get(request_id):

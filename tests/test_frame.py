@@ -1,30 +1,15 @@
 import os
 import sys
-from typing import Any
 
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.engine.mock import MockConnection
-from sqlalchemy.orm import sessionmaker
 import main
 from services.minio_service import MinioClient
-from models.frame_model import Base
 from services.db_service import DbClient
-from dotenv import load_dotenv
 
 
 client = TestClient(main.app)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-load_dotenv('.env')
-
-DATABASE_URL = os.environ.get('DATABASE_URL', "postgresql://postgres:12345@localhost/testdb")
-engine: MockConnection | Any = create_engine(
-    DATABASE_URL
-)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base.metadata.create_all(bind=engine)
 
 min = MinioClient()
 db = DbClient()
