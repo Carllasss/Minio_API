@@ -21,11 +21,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-<<<<<<< HEAD
-=======
       DATABASE_URL: postgresql://postgres:12345@db:5432/testdb
       MINIO_HOST: minio:9000
->>>>>>> 1144058 (docker tests, added README)
     depends_on:
       - db
       - minio
