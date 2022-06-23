@@ -1,4 +1,3 @@
-from fastapi import Response
 from minio import Minio
 import config
 
@@ -15,13 +14,11 @@ class MinioClient:
         else:
             print('Bucket already exist')
 
-    def minio_post(self, fileName, file):
-        self.client.fput_object('data', fileName, file.file.fileno())
-        return Response('posted')
+    def minio_post(self, file_name, file):
+        self.client.fput_object('data', file_name, file.file.fileno())
 
-    def minio_delete(self, fileName):
-        self.client.remove_object('data', fileName.title)
-        return 'deleted'
+    def minio_delete(self, file_name):
+        self.client.remove_object('data', file_name.title)
 
     def obj_exist(self, fileName):
 
