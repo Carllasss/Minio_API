@@ -20,7 +20,7 @@ def post(files):
             db_client.db_post(file_name, request_id)
 
         except Exception:
-            return {'error': 'somethings gone wrong'}
+            return Exception
 
     return {"request_id": request_id, 'files': [file.filename for file in files]}
 

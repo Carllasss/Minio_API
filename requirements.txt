@@ -13,8 +13,6 @@ databases==0.6.0
 docopt==0.6.2
 fastapi==0.78.0
 FastAPI-SQLAlchemy==0.2.1
-GeoAlchemy2==0.12.1
-geojson-pydantic==0.4.2
 greenlet==1.1.2
 h11==0.13.0
 idna==3.3

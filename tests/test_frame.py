@@ -10,12 +10,16 @@ import main
 from services.minio_service import MinioClient
 from models.frame_model import Base
 from services.db_service import DbClient
+from dotenv import load_dotenv
+
 
 client = TestClient(main.app)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DATABASE_URL = 'postgresql://postgres:12345@localhost/testdb'
+load_dotenv('.env')
+
+DATABASE_URL = os.environ.get('DATABASE_URL', "postgresql://postgres:12345@localhost/testdb")
 engine: MockConnection | Any = create_engine(
     DATABASE_URL
 )

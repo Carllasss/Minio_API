@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 import config
 from models.frame_model import Frame
 from fastapi import HTTPException
@@ -13,6 +12,7 @@ class DbClient:
 
         session = sessionmaker(bind=engine)
         self.session = session()
+
 
     def db_post(self, file_name, request_id):
         db_frame = Frame(title=file_name, request=request_id)
