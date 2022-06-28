@@ -4,6 +4,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from services.frame_service import post, get, delete
 from typing import List
 from fastapi.responses import Response
+from schema import GetFrame
 
 
 router = APIRouter(
@@ -27,9 +28,9 @@ async def upload_frame(files: List[UploadFile] = File()):
 
 
 @router.get('/{request_id}')
-async def get_frame(request_id: str):
+async def get_frame(request_id: str) -> list[GetFrame]:
     result = get(request_id)
-    return [{'file': frame.title, 'created_at': datetime.strftime(frame.created_at, "%d.%m.%Y, %H:%M:%S")} for
+    return [GetFrame(title=frame.title, created_at=datetime.strftime(frame.created_at, "%d.%m.%Y, %H:%M:%S")) for
             frame in result]
 
 

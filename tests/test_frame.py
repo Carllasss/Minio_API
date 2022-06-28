@@ -36,7 +36,7 @@ def test_get():
     answer = help_response.json()['request_id']
     response = client.get('/frames/' + answer)
     assert response.status_code == 200
-    assert response.json()[0]['file'] is not None
+    assert response.json()[0]['title'] is not None
 
 
 def test_get_bad_request():
@@ -47,7 +47,7 @@ def test_get_bad_request():
 
 
 def test_delete_bad_request():
-    response = client.delete('/frames/1')
+    response = client.delete('/frames/0')
     assert response.status_code == 404
 
 
